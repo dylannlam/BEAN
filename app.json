@@ -1,15 +1,21 @@
 {
   "expo": {
-    "name": "cafe-finder-tmp",
-    "slug": "cafe-finder-tmp",
+    "name": "Bean",
+    "slug": "cafe-finder",
+    "scheme": "cafefinder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "experiments": {
+      "typedRoutes": true
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dylanlam.cafefinder"
     },
     "android": {
+      "package": "com.dylanlam.cafefinder",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -20,6 +26,16 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Bean to access your photos to set a profile picture."
+        }
+      ]
+    ]
   }
 }
