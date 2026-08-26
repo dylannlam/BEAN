@@ -26,6 +26,7 @@ export function VisitCard({
   user,
   currentUserId,
   reactedUsers,
+  commentCount = 0,
   onToggleLike,
 }: {
   visit: Visit;
@@ -33,10 +34,12 @@ export function VisitCard({
   user: User;
   currentUserId: string;
   reactedUsers: User[];
+  commentCount?: number;
   onToggleLike?: (visitId: string) => void;
 }) {
   const liked = visit.likeUserIds.includes(currentUserId);
-  const photos = visit.photoUrls.length > 0 ? visit.photoUrls : [cafe.photoUrl];
+  const photos = visit.photoUrls;
+  const hasPhotos = photos.length > 0;
   const shownAvatars = reactedUsers.slice(0, 2);
   const overflowCount = reactedUsers.length - shownAvatars.length;
   const hasScore = visit.status === "been" && visit.score > 0;
@@ -99,7 +102,7 @@ export function VisitCard({
 
       <Link href={{ pathname: "/cafe/[id]", params: { id: cafe.id } }} asChild>
         <Pressable>
-          <Text style={{ fontSize: 15.5, color: INK, marginBottom: visit.note ? 4 : 10, fontFamily: FONT_SERIF_SEMIBOLD }}>
+          <Text style={{ fontSize: 15.5, color: INK, marginBottom: visit.note && hasPhotos ? 4 : 10, fontFamily: FONT_SERIF_SEMIBOLD }}>
             {cafe.name}
             {cafe.neighborhood ? (
               <Text style={{ color: INK_MUTED, fontFamily: FONT_SANS_MEDIUM, fontSize: 13 }}>{`  ·  ${cafe.neighborhood}`}</Text>
@@ -120,7 +123,7 @@ export function VisitCard({
             </Text>
           ) : null}
 
-          <PhotoCluster photos={photos} />
+          {hasPhotos && <PhotoCluster photos={photos} />}
         </Pressable>
       </Link>
 
@@ -170,7 +173,16 @@ export function VisitCard({
               <Text style={{ fontSize: 12, color: INK_MUTED, marginLeft: 5 }}>{visit.likeUserIds.length}</Text>
             )}
           </Pressable>
-          <Ionicons name="chatbubble-outline" size={17} color={INK_FAINT} />
+          <Pressable
+            onPress={() => router.push({ pathname: "/comments/[visitId]", params: { visitId: visit.id } })}
+            hitSlop={8}
+            className="flex-row items-center"
+          >
+            <Ionicons name="chatbubble-outline" size={17} color={INK_FAINT} />
+            {commentCount > 0 && (
+              <Text style={{ fontSize: 12, color: INK_MUTED, marginLeft: 5 }}>{commentCount}</Text>
+            )}
+          </Pressable>
         </View>
         <Pressable
           onPress={() => router.push({ pathname: "/cafe/[id]", params: { id: cafe.id } })}
@@ -184,6 +196,7 @@ export function VisitCard({
 }
 
 function PhotoCluster({ photos }: { photos: string[] }) {
+  if (photos.length === 0) return null;
   if (photos.length === 1) {
     return <Image source={{ uri: photos[0] }} style={{ width: "100%", height: 160, borderRadius: 14 }} resizeMode="cover" />;
   }

@@ -3,6 +3,7 @@ import { ActivityIndicator, Image, Linking, Pressable, ScrollView, Text, View } 
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { cafeRepository, userRepository, visitRepository } from "../../src/data/repositories";
+import { NEUTRAL_CATEGORY_SCORES } from "../../src/data/types";
 import { useAsync } from "../../src/lib/useAsync";
 import { useSessionStore } from "../../src/store/session";
 import { RatingBadge } from "../../src/components/RatingBadge";
@@ -134,6 +135,7 @@ export default function CafeDetailScreen() {
                 cafeId: cafe.id,
                 rating: "good",
                 score: 0,
+                categoryScores: NEUTRAL_CATEGORY_SCORES,
                 note: "",
                 tagIds: [],
                 status: "want",

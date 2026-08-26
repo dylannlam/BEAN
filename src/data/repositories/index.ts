@@ -2,12 +2,14 @@ import { isSupabaseConfigured } from "../../lib/supabase";
 import {
   MockBadgeRepository,
   MockCafeRepository,
+  MockCommentRepository,
   MockUserRepository,
   MockVisitRepository,
 } from "./mock";
 import {
   SupabaseBadgeRepository,
   SupabaseCafeRepository,
+  SupabaseCommentRepository,
   SupabaseUserRepository,
   SupabaseVisitRepository,
 } from "./supabase";
@@ -28,5 +30,8 @@ export const userRepository = isSupabaseConfigured
 export const badgeRepository = isSupabaseConfigured
   ? new SupabaseBadgeRepository()
   : new MockBadgeRepository();
+export const commentRepository = isSupabaseConfigured
+  ? new SupabaseCommentRepository()
+  : new MockCommentRepository();
 
 export * from "./types";

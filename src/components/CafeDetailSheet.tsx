@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Image, Linking, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Cafe, User, Visit } from "../data/types";
+import { Cafe, NEUTRAL_CATEGORY_SCORES, User, Visit } from "../data/types";
 import { visitRepository } from "../data/repositories";
 import { priceLabel } from "./CafeCard";
 import { TagPill } from "./TagPill";
@@ -149,6 +149,7 @@ export function CafeDetailSheet({
                     cafeId: shownCafe.id,
                     rating: "good",
                     score: 0,
+                    categoryScores: NEUTRAL_CATEGORY_SCORES,
                     note: "",
                     tagIds: [],
                     status: "want",

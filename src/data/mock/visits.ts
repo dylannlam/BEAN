@@ -1,4 +1,11 @@
-import { Visit } from "../types";
+import { CATEGORY_KEYS, CategoryScores, Visit } from "../types";
+
+/** Flat per-category breakdown matching an existing mock `score` — good
+ * enough for fixture data where the split doesn't need to be exact. */
+function flatCategoryScores(score: number): CategoryScores {
+  const clamped = Math.min(10, Math.max(1, score || 5.5));
+  return CATEGORY_KEYS.reduce((acc, key) => ({ ...acc, [key]: clamped }), {} as CategoryScores);
+}
 
 // Generic visit-photo pool (what a user might snap while there), separate
 // from each cafe's own listing photo.
@@ -24,6 +31,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-1",
     rating: "good",
     score: 9.2,
+    categoryScores: flatCategoryScores(9.2),
     note: "Great flat white, chill spot to get work done.",
     tagIds: ["work", "wifi"],
     status: "been",
@@ -37,6 +45,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-6",
     rating: "good",
     score: 8.7,
+    categoryScores: flatCategoryScores(8.7),
     note: "Perfect for a solo study session, quiet upstairs.",
     tagIds: ["study", "solo"],
     status: "been",
@@ -50,6 +59,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-9",
     rating: "fine",
     score: 6.4,
+    categoryScores: flatCategoryScores(6.4),
     note: "Good quick coffee, a bit cramped to sit and work.",
     tagIds: ["quick-grab"],
     status: "been",
@@ -63,6 +73,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-13",
     rating: "good",
     score: 9.0,
+    categoryScores: flatCategoryScores(9.0),
     note: "Lovely spot for a first date, cozy tables.",
     tagIds: ["date"],
     status: "been",
@@ -76,6 +87,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-2",
     rating: "good",
     score: 8.5,
+    categoryScores: flatCategoryScores(8.5),
     note: "Big tables, easy to catch up with a group over coffee.",
     tagIds: ["coffee-chat", "groups"],
     status: "been",
@@ -89,6 +101,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-8",
     rating: "good",
     score: 9.4,
+    categoryScores: flatCategoryScores(9.4),
     note: "Beautiful brunch, worth the wait on weekends.",
     tagIds: ["brunch", "date"],
     status: "been",
@@ -102,6 +115,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-11",
     rating: "fine",
     score: 6.1,
+    categoryScores: flatCategoryScores(6.1),
     note: "Solid coffee, service was a bit slow.",
     tagIds: ["work"],
     status: "been",
@@ -115,6 +129,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-4",
     rating: "good",
     score: 8.9,
+    categoryScores: flatCategoryScores(8.9),
     note: "My go-to for a quiet morning study block.",
     tagIds: ["study", "solo"],
     status: "been",
@@ -128,6 +143,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-5",
     rating: "good",
     score: 9.1,
+    categoryScores: flatCategoryScores(9.1),
     note: "Best pastries in Bethnal Green, hands down.",
     tagIds: ["food"],
     status: "been",
@@ -141,6 +157,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-7",
     rating: "bad",
     score: 3.8,
+    categoryScores: flatCategoryScores(3.8),
     note: "Loved the space, coffee was underwhelming.",
     tagIds: ["coffee-chat"],
     status: "been",
@@ -154,6 +171,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-10",
     rating: "good",
     score: 8.8,
+    categoryScores: flatCategoryScores(8.8),
     note: "Dog-friendly and huge brunch menu, great with a group.",
     tagIds: ["groups", "pet-friendly", "brunch"],
     status: "been",
@@ -167,6 +185,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-12",
     rating: "good",
     score: 9.0,
+    categoryScores: flatCategoryScores(9.0),
     note: "Perfect low-key date spot with amazing bakes.",
     tagIds: ["date", "bakery"],
     status: "been",
@@ -180,6 +199,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-3",
     rating: "good",
     score: 8.6,
+    categoryScores: flatCategoryScores(8.6),
     note: "Great weekend brunch, outdoor tables were lovely.",
     tagIds: ["brunch", "outdoor"],
     status: "been",
@@ -193,6 +213,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-14",
     rating: "fine",
     score: 6.7,
+    categoryScores: flatCategoryScores(6.7),
     note: "Fine for studying, gets loud after midday.",
     tagIds: ["study"],
     status: "been",
@@ -206,6 +227,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-3",
     rating: "good",
     score: 0,
+    categoryScores: flatCategoryScores(0),
     note: "",
     tagIds: [],
     status: "want",
@@ -219,6 +241,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-8",
     rating: "good",
     score: 0,
+    categoryScores: flatCategoryScores(0),
     note: "",
     tagIds: [],
     status: "want",
@@ -232,6 +255,7 @@ export const MOCK_VISITS: Visit[] = [
     cafeId: "cafe-12",
     rating: "good",
     score: 0,
+    categoryScores: flatCategoryScores(0),
     note: "",
     tagIds: [],
     status: "want",

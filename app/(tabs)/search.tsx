@@ -29,7 +29,7 @@ import {
 import { isOpenNow, milesBetween, milesFromHome } from "../../src/lib/distance";
 import { loadGoogleMaps } from "../../src/lib/googleMapsLoader";
 import { autocompletePlaces, getPlaceDetails, PlaceSuggestion } from "../../src/lib/places";
-import { Cafe, User, Visit } from "../../src/data/types";
+import { Cafe, NEUTRAL_CATEGORY_SCORES, User, Visit } from "../../src/data/types";
 
 const FALLBACK_PHOTO = "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800";
 
@@ -284,6 +284,7 @@ export default function SearchScreen() {
                       cafeId: item.id,
                       rating: "good",
                       score: 0,
+                      categoryScores: NEUTRAL_CATEGORY_SCORES,
                       note: "",
                       tagIds: [],
                       status: "want",

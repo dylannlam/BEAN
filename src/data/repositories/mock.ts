@@ -1,12 +1,14 @@
-import { Cafe, Follow, User, Visit } from "../types";
+import { Cafe, Comment, Follow, User, Visit } from "../types";
 import { MOCK_BADGES } from "../mock/badges";
 import { MOCK_CAFES } from "../mock/cafes";
+import { MOCK_COMMENTS } from "../mock/comments";
 import { MOCK_FOLLOWS } from "../mock/follows";
 import { MOCK_USERS, CURRENT_USER_ID } from "../mock/users";
 import { MOCK_VISITS } from "../mock/visits";
 import {
   BadgeRepository,
   CafeRepository,
+  CommentRepository,
   UserRepository,
   VisitRepository,
 } from "./types";
@@ -19,6 +21,8 @@ let nextVisitId = visits.length + 1;
 let cafes: Cafe[] = [...MOCK_CAFES];
 let follows: Follow[] = [...MOCK_FOLLOWS];
 let users: User[] = [...MOCK_USERS];
+let comments: Comment[] = [...MOCK_COMMENTS];
+let nextCommentId = comments.length + 1;
 
 function delay<T>(value: T): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), 120));
@@ -88,6 +92,10 @@ export class MockVisitRepository implements VisitRepository {
     if (!updated) throw new Error(`Visit ${visitId} not found`);
     return delay(updated);
   }
+
+  async uploadVisitPhoto(_userId: string, fileUri: string): Promise<string> {
+    return delay(fileUri);
+  }
 }
 
 export class MockUserRepository implements UserRepository {
@@ -140,5 +148,29 @@ export class MockUserRepository implements UserRepository {
 export class MockBadgeRepository implements BadgeRepository {
   async listBadges() {
     return delay(MOCK_BADGES);
+  }
+}
+
+export class MockCommentRepository implements CommentRepository {
+  async listComments() {
+    return delay([...comments].sort((a, b) => a.createdAt.localeCompare(b.createdAt)));
+  }
+
+  async listCommentsForVisit(visitId: string) {
+    return delay(
+      comments
+        .filter((c) => c.visitId === visitId)
+        .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+    );
+  }
+
+  async addComment(input: Omit<Comment, "id" | "createdAt">) {
+    const comment: Comment = {
+      ...input,
+      id: `comment-${nextCommentId++}`,
+      createdAt: new Date().toISOString(),
+    };
+    comments = [...comments, comment];
+    return delay(comment);
   }
 }

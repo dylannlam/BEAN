@@ -70,6 +70,7 @@ export default function RootLayout() {
           <Stack.Screen name="user/[id]" options={{ title: "Profile" }} />
           <Stack.Screen name="user/friends" options={{ title: "Friends" }} />
           <Stack.Screen name="log/[cafeId]" options={{ title: "Log a Visit", presentation: "modal" }} />
+          <Stack.Screen name="comments/[visitId]" options={{ title: "Comments", presentation: "modal" }} />
           <Stack.Screen name="auth/index" options={{ title: "Sign In", headerShown: false }} />
         </Stack>
       </AuthGate>

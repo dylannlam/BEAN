@@ -1,4 +1,4 @@
-import { Badge, Cafe, Follow, User, Visit } from "../types";
+import { Badge, Cafe, Comment, Follow, User, Visit } from "../types";
 
 export interface CafeRepository {
   listCafes(): Promise<Cafe[]>;
@@ -13,6 +13,9 @@ export interface VisitRepository {
   listVisitsByCafe(cafeId: string): Promise<Visit[]>;
   addVisit(visit: Omit<Visit, "id" | "createdAt" | "likeUserIds">): Promise<Visit>;
   toggleLike(visitId: string, userId: string): Promise<Visit>;
+  /** Uploads the image at `fileUri` (a local file:// or content:// URI from
+   * the image picker) for a visit-in-progress and returns its public URL. */
+  uploadVisitPhoto(userId: string, fileUri: string): Promise<string>;
 }
 
 export interface UserRepository {
@@ -30,4 +33,10 @@ export interface UserRepository {
 
 export interface BadgeRepository {
   listBadges(): Promise<Badge[]>;
+}
+
+export interface CommentRepository {
+  listComments(): Promise<Comment[]>;
+  listCommentsForVisit(visitId: string): Promise<Comment[]>;
+  addComment(comment: Omit<Comment, "id" | "createdAt">): Promise<Comment>;
 }

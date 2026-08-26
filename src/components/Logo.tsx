@@ -1,25 +1,15 @@
-import { Text, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Image, Text, View } from "react-native";
 import { FONT_SERIF_BOLD } from "../lib/fonts";
 
+// The actual app icon file, used as-is (it's already square with
+// transparent corners baked in), so the in-app header badge matches the
+// home-screen icon exactly.
+const LOGO_MARK_ASSET = require("../../assets/icon.png");
+
+/** The app icon badge (assets/icon.png), used inline in headers next to the
+ * wordmark. */
 export function LogoMark({ size = 32 }: { size?: number }) {
-  return (
-    <View style={{ width: size, height: size }}>
-      <Ionicons name="location" size={size} color="#3D2B1F" />
-      <View
-        style={{
-          position: "absolute",
-          top: size * 0.24,
-          left: size * 0.44,
-          width: size * 0.09,
-          height: size * 0.34,
-          borderRadius: size * 0.05,
-          backgroundColor: "#E85D3D",
-          transform: [{ rotate: "18deg" }],
-        }}
-      />
-    </View>
-  );
+  return <Image source={LOGO_MARK_ASSET} style={{ width: size, height: size }} resizeMode="contain" />;
 }
 
 export function Wordmark({

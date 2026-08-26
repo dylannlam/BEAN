@@ -1,9 +1,10 @@
 import { supabase } from "../../lib/supabase";
-import { Cafe, Follow, PriceLevel, RatingValue, User, Visit } from "../types";
+import { Cafe, CategoryScores, Comment, Follow, PriceLevel, RatingValue, User, Visit } from "../types";
 import { MOCK_BADGES } from "../mock/badges";
 import {
   BadgeRepository,
   CafeRepository,
+  CommentRepository,
   UserRepository,
   VisitRepository,
 } from "./types";
@@ -44,6 +45,7 @@ interface VisitRow {
   cafe_id: string;
   rating: RatingValue;
   score: number;
+  category_scores: CategoryScores;
   note: string | null;
   photo_urls: string[] | null;
   status: "been" | "want";
@@ -57,6 +59,7 @@ function rowToVisit(row: VisitRow, tagIds: string[], likeUserIds: string[]): Vis
     cafeId: row.cafe_id,
     rating: row.rating,
     score: row.score,
+    categoryScores: row.category_scores,
     note: row.note ?? "",
     tagIds,
     status: row.status,
@@ -217,6 +220,7 @@ export class SupabaseVisitRepository implements VisitRepository {
         cafe_id: input.cafeId,
         rating: input.rating,
         score: input.score,
+        category_scores: input.categoryScores,
         note: input.note,
         photo_urls: input.photoUrls,
         status: input.status,
@@ -256,6 +260,24 @@ export class SupabaseVisitRepository implements VisitRepository {
     if (error) throw error;
     const [visit] = await this.hydrate([row]);
     return visit;
+  }
+
+  async uploadVisitPhoto(userId: string, fileUri: string): Promise<string> {
+    const response = await fetch(fileUri);
+    const arrayBuffer = await response.arrayBuffer();
+    const extension = fileUri.split(".").pop()?.toLowerCase() ?? "jpg";
+    const path = `${userId}/${Date.now()}-${Math.round(Math.random() * 1e6)}.${extension}`;
+    const contentType = extension === "png" ? "image/png" : "image/jpeg";
+
+    const { error: uploadError } = await supabase.storage
+      .from("visit-photos")
+      .upload(path, arrayBuffer, { contentType, upsert: true });
+    if (uploadError) throw uploadError;
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("visit-photos").getPublicUrl(path);
+    return publicUrl;
   }
 }
 
@@ -350,5 +372,54 @@ export class SupabaseUserRepository implements UserRepository {
 export class SupabaseBadgeRepository implements BadgeRepository {
   async listBadges() {
     return MOCK_BADGES;
+  }
+}
+
+interface CommentRow {
+  id: string;
+  visit_id: string;
+  user_id: string;
+  text: string;
+  created_at: string;
+}
+
+function rowToComment(row: CommentRow): Comment {
+  return {
+    id: row.id,
+    visitId: row.visit_id,
+    userId: row.user_id,
+    text: row.text,
+    createdAt: row.created_at,
+  };
+}
+
+export class SupabaseCommentRepository implements CommentRepository {
+  async listComments(): Promise<Comment[]> {
+    const { data, error } = await supabase
+      .from("visit_comments")
+      .select("*")
+      .order("created_at", { ascending: true });
+    if (error) throw error;
+    return (data ?? []).map(rowToComment);
+  }
+
+  async listCommentsForVisit(visitId: string): Promise<Comment[]> {
+    const { data, error } = await supabase
+      .from("visit_comments")
+      .select("*")
+      .eq("visit_id", visitId)
+      .order("created_at", { ascending: true });
+    if (error) throw error;
+    return (data ?? []).map(rowToComment);
+  }
+
+  async addComment(input: Omit<Comment, "id" | "createdAt">): Promise<Comment> {
+    const { data: row, error } = await supabase
+      .from("visit_comments")
+      .insert({ visit_id: input.visitId, user_id: input.userId, text: input.text })
+      .select()
+      .single();
+    if (error) throw error;
+    return rowToComment(row);
   }
 }

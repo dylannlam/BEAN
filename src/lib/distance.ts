@@ -28,6 +28,17 @@ export function milesFromHome(cafe: Cafe): number {
   return milesBetween(HOME_BASE, { lat: cafe.lat, lng: cafe.lng });
 }
 
+/** The `limit` cafes closest to `origin`, nearest first. */
+export function nearestCafes(
+  cafes: Cafe[],
+  origin: { lat: number; lng: number },
+  limit: number
+): Cafe[] {
+  return [...cafes]
+    .sort((a, b) => milesBetween(origin, a) - milesBetween(origin, b))
+    .slice(0, limit);
+}
+
 export function formatMiles(miles: number): string {
   return `${miles.toFixed(1)} mi`;
 }

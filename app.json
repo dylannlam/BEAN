@@ -35,6 +35,12 @@
         {
           "photosPermission": "Allow Bean to access your photos to set a profile picture."
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow Bean to use your location to recommend cafes near you."
+        }
       ]
     ]
   }
