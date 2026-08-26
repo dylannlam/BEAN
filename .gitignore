@@ -47,3 +47,5 @@ supabase/seed.sql
 
 # Supabase CLI local cache (project ref, pooler URL, version pins)
 supabase/.temp/
+.vercel
+.env*
